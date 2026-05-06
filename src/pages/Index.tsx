@@ -107,7 +107,7 @@ export default function Index() {
 
       {/* HERO */}
       <section id="home" className="relative min-h-screen flex items-center justify-center bg-grid overflow-hidden pt-16">
-        <img src="https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/bucket/2f25c990-c293-416e-8d14-99cdb5a88afd.jpg" alt="" className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 pointer-events-none select-none" />
+        <img src="https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/bucket/2f25c990-c293-416e-8d14-99cdb5a88afd.jpg" alt="" className="absolute inset-0 w-full h-full object-cover blur-sm opacity-20 pointer-events-none select-none scale-150" />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-transparent to-background pointer-events-none" />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-3xl pointer-events-none" />
 
