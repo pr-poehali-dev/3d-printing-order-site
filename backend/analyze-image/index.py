@@ -31,7 +31,7 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps({'error': 'Изображение не передано'})
         }
 
-    api_key = os.environ.get('OPENAI_API_KEY')
+    api_key = os.environ.get('PROXYAPI_KEY')
     if not api_key:
         return {
             'statusCode': 500,
@@ -72,7 +72,7 @@ def handler(event: dict, context) -> dict:
     }
 
     req = urllib.request.Request(
-        'https://api.openai.com/v1/chat/completions',
+        'https://api.proxyapi.ru/openai/v1/chat/completions',
         data=json.dumps(payload).encode('utf-8'),
         headers={
             'Authorization': f'Bearer {api_key}',
