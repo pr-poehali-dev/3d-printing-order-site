@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
+
+const ANALYZE_IMAGE_URL = "https://functions.poehali.dev/82aa100b-18c1-4a0f-959d-7e36027ecf84";
 
 const PHOTO_MATERIALS = [
   { id: "standard", name: "Стандартная смола", pricePerCm3: 35, color: "#60a5fa", desc: "Общие модели, прототипы, детали" },
@@ -29,6 +31,10 @@ export default function Index() {
   const [volume, setVolume] = useState<string>("10");
   const [quantity, setQuantity] = useState<string>("1");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [imageAnalyzing, setImageAnalyzing] = useState(false);
+  const [imageResult, setImageResult] = useState<{length_mm?: number; width_mm?: number; height_mm?: number; volume_cm3?: number; note?: string; error?: string} | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
   const selectedMaterial = materials.find(m => m.id === calcMaterial) || materials[0];
@@ -37,6 +43,33 @@ export default function Index() {
   const basePrice = vol * selectedMaterial.pricePerCm3;
   const totalPrice = basePrice * qty;
   const pricePerPiece = basePrice;
+
+  const handleImageUpload = async (file: File) => {
+    setImageResult(null);
+    setPreviewUrl(URL.createObjectURL(file));
+    setImageAnalyzing(true);
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const base64 = (e.target?.result as string).split(',')[1];
+      try {
+        const res = await fetch(ANALYZE_IMAGE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: base64 })
+        });
+        const data = await res.json();
+        setImageResult(data);
+        if (data.volume_cm3 && !data.error) {
+          setVolume(String(Math.round(data.volume_cm3 * 10) / 10));
+        }
+      } catch {
+        setImageResult({ error: 'Ошибка соединения с сервером' });
+      } finally {
+        setImageAnalyzing(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const scrollTo = (id: string) => {
     setActiveSection(id);
@@ -330,6 +363,59 @@ export default function Index() {
 
                   {/* VOLUME & RESULT */}
                   <div className="space-y-6">
+                    {/* IMAGE ANALYZE */}
+                    <div>
+                      <label className="text-xs font-mono-code text-blue-400 uppercase tracking-wider mb-3 block">Расчёт по фото с размерами</label>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={e => { const f = e.target.files?.[0]; if (f) handleImageUpload(f); }}
+                      />
+                      <div
+                        onClick={() => fileInputRef.current?.click()}
+                        onDragOver={e => e.preventDefault()}
+                        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files?.[0]; if (f) handleImageUpload(f); }}
+                        className="border-2 border-dashed border-border hover:border-blue-500/50 rounded-lg p-4 cursor-pointer transition-colors text-center group"
+                      >
+                        {previewUrl ? (
+                          <img src={previewUrl} alt="preview" className="max-h-32 mx-auto rounded object-contain mb-2" />
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 py-2">
+                            <Icon name="ImagePlus" size={28} className="text-muted-foreground group-hover:text-blue-400 transition-colors" />
+                            <span className="text-sm text-muted-foreground">Загрузите фото изделия с указанными размерами</span>
+                            <span className="text-xs text-muted-foreground/60">Поддерживаются JPG, PNG</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {imageAnalyzing && (
+                        <div className="mt-3 flex items-center gap-2 text-blue-400 text-sm">
+                          <Icon name="Loader2" size={16} className="animate-spin" />
+                          ИИ распознаёт габариты...
+                        </div>
+                      )}
+
+                      {imageResult && !imageAnalyzing && (
+                        <div className={`mt-3 rounded-lg p-3 text-sm ${imageResult.error ? 'bg-red-500/10 border border-red-500/30 text-red-400' : 'bg-blue-500/10 border border-blue-500/20'}`}>
+                          {imageResult.error ? (
+                            <span>{imageResult.error}</span>
+                          ) : (
+                            <div className="space-y-1">
+                              <div className="flex gap-4 text-white font-mono-code text-xs">
+                                <span>Д: <b>{imageResult.length_mm} мм</b></span>
+                                <span>Ш: <b>{imageResult.width_mm} мм</b></span>
+                                <span>В: <b>{imageResult.height_mm} мм</b></span>
+                              </div>
+                              <div className="text-blue-400 font-semibold">Объём: {imageResult.volume_cm3} см³ — подставлен автоматически</div>
+                              {imageResult.note && <div className="text-muted-foreground text-xs">{imageResult.note}</div>}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     <div>
                       <label className="text-xs font-mono-code text-blue-400 uppercase tracking-wider mb-3 block">Объём модели (см³)</label>
                       <div className="relative">
@@ -344,7 +430,7 @@ export default function Index() {
                         />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-mono-code">см³</span>
                       </div>
-                      <p className="text-xs text-muted-foreground mt-2">Найдите в настройках слайсера: «Объём модели» или «Model Volume»</p>
+                      <p className="text-xs text-muted-foreground mt-2">Или введите вручную из слайсера: «Объём модели» или «Model Volume»</p>
                     </div>
 
                     <div>
