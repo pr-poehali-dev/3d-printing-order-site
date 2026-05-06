@@ -61,7 +61,7 @@ export default function Index() {
             <div className="w-7 h-7 rounded bg-blue-500 flex items-center justify-center">
               <Icon name="Layers" size={14} className="text-white" />
             </div>
-            <span className="font-bold text-white tracking-tight">DATAR <span className="text-blue-400">3D</span></span>
+            <span className="font-bold text-white tracking-tight">DATA<span className="text-blue-400">R</span> <span className="text-white">3D</span></span>
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
