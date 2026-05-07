@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 const ANALYZE_IMAGE_URL = "https://functions.poehali.dev/82aa100b-18c1-4a0f-959d-7e36027ecf84";
+const SEND_ORDER_URL = "https://functions.poehali.dev/3d462ff9-cdff-4155-bb2d-15fdee341c9e";
 
 const PHOTO_MATERIALS = [
   { id: "standard", name: "Стандартная смола", pricePerCm3: 35, color: "#60a5fa", desc: "Общие модели, прототипы, детали" },
@@ -34,6 +35,13 @@ export default function Index() {
   const [imageAnalyzing, setImageAnalyzing] = useState(false);
   const [imageResult, setImageResult] = useState<{length_mm?: number; width_mm?: number; height_mm?: number; volume_cm3?: number; note?: string; error?: string} | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [orderName, setOrderName] = useState("");
+  const [orderContact, setOrderContact] = useState("");
+  const [orderPrintType, setOrderPrintType] = useState("");
+  const [orderDescription, setOrderDescription] = useState("");
+  const [orderSending, setOrderSending] = useState(false);
+  const [orderSent, setOrderSent] = useState(false);
+  const [orderError, setOrderError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
@@ -606,32 +614,81 @@ export default function Index() {
 
             <div className="card-glow bg-card rounded-xl p-6 space-y-4">
               <h3 className="font-bold text-white text-lg">Отправить запрос</h3>
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="Ваше имя"
-                  className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
-                />
-                <input
-                  type="text"
-                  placeholder="Телефон или email"
-                  className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
-                />
-                <select className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500/60 transition-colors appearance-none">
-                  <option value="" className="bg-card">Тип печати</option>
-                  <option value="photo" className="bg-card">Фотополимерная</option>
-                  <option value="extrusion" className="bg-card">Экструзионная</option>
-                </select>
-                <textarea
-                  placeholder="Опишите задачу: объём, количество, требования к материалу и срокам..."
-                  rows={4}
-                  className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
-                />
-                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100">
-                  <Icon name="Send" size={16} />
-                  Отправить заявку
-                </button>
-              </div>
+              {orderSent ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-3 text-center">
+                  <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <Icon name="CheckCircle" size={24} className="text-green-400" />
+                  </div>
+                  <p className="text-white font-semibold">Заявка отправлена!</p>
+                  <p className="text-muted-foreground text-sm">Мы свяжемся с вами в ближайшее время</p>
+                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Ваше имя"
+                    value={orderName}
+                    onChange={e => setOrderName(e.target.value)}
+                    className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Телефон или email"
+                    value={orderContact}
+                    onChange={e => setOrderContact(e.target.value)}
+                    className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
+                  />
+                  <select
+                    value={orderPrintType}
+                    onChange={e => setOrderPrintType(e.target.value)}
+                    className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500/60 transition-colors appearance-none"
+                  >
+                    <option value="" className="bg-card">Тип печати</option>
+                    <option value="photo" className="bg-card">Фотополимерная</option>
+                    <option value="extrusion" className="bg-card">Экструзионная</option>
+                  </select>
+                  <textarea
+                    placeholder="Опишите задачу: объём, количество, требования к материалу и срокам..."
+                    rows={4}
+                    value={orderDescription}
+                    onChange={e => setOrderDescription(e.target.value)}
+                    className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
+                  />
+                  {orderError && <p className="text-red-400 text-sm">{orderError}</p>}
+                  <button
+                    disabled={orderSending}
+                    onClick={async () => {
+                      setOrderError("");
+                      if (!orderName.trim() || !orderContact.trim()) {
+                        setOrderError("Укажите имя и контакт");
+                        return;
+                      }
+                      setOrderSending(true);
+                      try {
+                        const res = await fetch(SEND_ORDER_URL, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ name: orderName, contact: orderContact, print_type: orderPrintType, description: orderDescription }),
+                        });
+                        if (res.ok) {
+                          setOrderSent(true);
+                        } else {
+                          setOrderError("Ошибка отправки. Попробуйте позже.");
+                        }
+                      } catch {
+                        setOrderError("Ошибка сети. Попробуйте позже.");
+                      } finally {
+                        setOrderSending(false);
+                      }
+                    }}
+                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
+                  >
+                    <Icon name={orderSending ? "Loader" : "Send"} size={16} className={orderSending ? "animate-spin" : ""} />
+                    {orderSending ? "Отправляем..." : "Отправить заявку"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
