@@ -21,6 +21,12 @@ def handler(event: dict, context) -> dict:
     contact = body.get('contact', '').strip()
     print_type = body.get('print_type', '').strip()
     description = body.get('description', '').strip()
+    calc_type = body.get('calc_type', '')
+    calc_material = body.get('calc_material', '')
+    calc_volume = body.get('calc_volume', 0)
+    calc_quantity = body.get('calc_quantity', 1)
+    calc_price_per_piece = body.get('calc_price_per_piece', 0)
+    calc_total_price = body.get('calc_total_price', 0)
 
     if not name or not contact:
         return {
@@ -38,6 +44,19 @@ def handler(event: dict, context) -> dict:
         'extrusion': 'Экструзионная',
     }.get(print_type, print_type or 'Не указан')
 
+    calc_block = ''
+    if calc_material and calc_volume:
+        calc_type_label = {'photo': 'Фотополимерная', 'extrusion': 'Экструзионная'}.get(calc_type, calc_type)
+        calc_block = f"""
+<tr><td colspan="2" style="padding:8px;font-weight:bold;background:#e8f0fe;color:#1a56db">Расчёт из калькулятора</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Технология</td><td style="padding:8px">{calc_type_label}</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Материал</td><td style="padding:8px">{calc_material}</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Объём</td><td style="padding:8px">{calc_volume} см³</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Количество</td><td style="padding:8px">{calc_quantity} шт.</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Цена за штуку</td><td style="padding:8px">{calc_price_per_piece} ₽</td></tr>
+<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Итого</td><td style="padding:8px;font-weight:bold;color:#1a56db">{calc_total_price} ₽</td></tr>
+"""
+
     html_body = f"""
 <h2>Новая заявка с сайта PRINT3D</h2>
 <table style="border-collapse:collapse;width:100%;max-width:500px">
@@ -45,6 +64,7 @@ def handler(event: dict, context) -> dict:
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Контакт</td><td style="padding:8px">{contact}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Тип печати</td><td style="padding:8px">{print_type_label}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Описание задачи</td><td style="padding:8px">{description or 'Не указано'}</td></tr>
+  {calc_block}
 </table>
 """
 

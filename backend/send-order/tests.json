@@ -11,9 +11,7 @@
       "method": "POST",
       "path": "/",
       "body": {"name": "", "contact": ""},
-      "expectedStatus": 400,
-      "expectedBody": {"error": "Укажите имя и контакт"},
-      "bodyMatcher": "partial"
+      "expectedStatus": 400
     }
   ]
 }

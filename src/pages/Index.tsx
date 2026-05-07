@@ -669,7 +669,18 @@ export default function Index() {
                         const res = await fetch(SEND_ORDER_URL, {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({ name: orderName, contact: orderContact, print_type: orderPrintType, description: orderDescription }),
+                          body: JSON.stringify({
+                            name: orderName,
+                            contact: orderContact,
+                            print_type: orderPrintType,
+                            description: orderDescription,
+                            calc_type: calcType,
+                            calc_material: selectedMaterial.name,
+                            calc_volume: vol,
+                            calc_quantity: qty,
+                            calc_price_per_piece: Math.round(pricePerPiece),
+                            calc_total_price: Math.round(totalPrice),
+                          }),
                         });
                         if (res.ok) {
                           setOrderSent(true);
