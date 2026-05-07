@@ -709,10 +709,8 @@ export default function Index() {
       <footer className="border-t border-border py-8 bg-background">
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-blue-500 flex items-center justify-center">
-              <Icon name="Layers" size={12} className="text-white" />
-            </div>
-            <span className="font-bold text-white text-sm">PRINT<span className="text-blue-400">3D</span></span>
+            <img src="https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/bucket/36208e6f-53ef-46f2-89b4-57689e1acfda.jpg" alt="DATAR 3D" className="w-8 h-8 rounded object-cover" />
+            <span className="font-bold text-white text-sm tracking-tight">DATA<span className="text-blue-400">R</span> <span className="text-white">3D</span></span>
           </div>
           <div className="text-xs text-muted-foreground text-center">
             Профессиональная 3D печать на заказ. Фотополимер и экструзия.
