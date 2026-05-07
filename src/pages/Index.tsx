@@ -582,8 +582,8 @@ export default function Index() {
               <h3 className="font-bold text-white text-lg">Контактная информация</h3>
 
               {[
-                { icon: "Mail", label: "Email", value: "info@print3d.ru", href: "mailto:info@print3d.ru" },
-                { icon: "Phone", label: "Телефон", value: "+7 (000) 000-00-00", href: "tel:+70000000000" },
+                { icon: "Mail", label: "Email", value: "DATAR3D@yandex.ru", href: "mailto:DATAR3D@yandex.ru" },
+                { icon: "Phone", label: "Телефон", value: "+7 (977) 640-69-64", href: "tel:+79776406964" },
                 { icon: "MessageCircle", label: "Telegram", value: "@print3d_bot", href: "#" },
                 { icon: "MapPin", label: "Адрес", value: "г. Москва, ул. Примерная, д. 1", href: "#" },
                 { icon: "Clock", label: "Режим работы", value: "Пн–Пт: 9:00–18:00", href: null },
