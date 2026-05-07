@@ -20,7 +20,7 @@ const EXTRUSION_MATERIALS = [
   { id: "carbon", name: "Carbon Fiber", pricePerCm3: 55, color: "#94a3b8", desc: "Лёгкие прочные конструкции" },
 ];
 
-const PHOTO_IMAGE = "https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/files/6820e779-90b1-464a-86bd-dd9e76498fc5.jpg";
+const PHOTO_IMAGE = "https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/files/4fa4d864-4f3a-4eeb-8ab8-acf791a0cbd2.jpg";
 const EXTRUSION_IMAGE = "https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/files/4b923267-4b74-4b4e-a986-c6d8bbebd213.jpg";
 
 type PrintType = "photo" | "extrusion";
