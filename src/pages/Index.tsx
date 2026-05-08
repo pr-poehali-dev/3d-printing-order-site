@@ -325,7 +325,7 @@ export default function Index() {
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-black text-white mb-1">3D моделирование по чертежам или эскизам</h3>
-                <p className="text-sm text-muted-foreground">Создадим готовую 3D модель по вашему чертежу, фотографии или эскизу от руки — файл сразу готов к печати.</p>
+                <p className="text-sm text-muted-foreground">Создадим готовую 3D модель по вашему чертежу, фотографии или эскизу от руки — файл готов в течении 2–4 дней.</p>
               </div>
               <div className="text-right flex-shrink-0">
                 <div className="text-2xl font-black text-white font-mono-code">от 1 500 ₽</div>
