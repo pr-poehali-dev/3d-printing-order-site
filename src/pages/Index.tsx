@@ -99,7 +99,7 @@ export default function Index() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src="https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/bucket/36208e6f-53ef-46f2-89b4-57689e1acfda.jpg" alt="DATAR 3D" className="w-24 h-24 rounded object-cover" />
+            <img src="https://cdn.poehali.dev/projects/e31e930a-24cf-44c8-937f-81d66ffe9044/bucket/36208e6f-53ef-46f2-89b4-57689e1acfda.jpg" alt="DATAR 3D" className="w-16 h-16 md:w-24 md:h-24 rounded object-cover" />
             <span className="font-bold text-white tracking-tight">DATA<span className="text-blue-400">R</span> <span className="text-white">3D</span></span>
           </div>
 
@@ -158,12 +158,12 @@ export default function Index() {
             <span className="text-blue-400 text-xs font-mono-code font-medium tracking-widest uppercase">Профессиональная 3D печать</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6 animate-fade-up animate-delay-100">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white leading-tight mb-6 animate-fade-up animate-delay-100">
             Точность до<br />
             <span className="text-gradient">микрона</span>
           </h1>
 
-          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-up animate-delay-200">
+          <p className="text-muted-foreground text-sm sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-up animate-delay-200 px-2">
             Фотополимерная и экструзионная 3D печать на заказ.<br />
             Стоимость рассчитывается по объёму — честно и прозрачно.
           </p>
@@ -185,15 +185,15 @@ export default function Index() {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto mt-20 animate-fade-up animate-delay-400">
+          <div className="grid grid-cols-3 gap-3 md:gap-6 max-w-lg mx-auto mt-16 md:mt-20 animate-fade-up animate-delay-400">
             {[
               { value: "24ч", label: "Минимальный срок" },
               { value: "0.01мм", label: "Точность фотополимера" },
               { value: "50+", label: "Материалов" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-2xl font-black text-white font-mono-code">{stat.value}</div>
-                <div className="text-xs text-muted-foreground mt-1">{stat.label}</div>
+                <div className="text-xl md:text-2xl font-black text-white font-mono-code">{stat.value}</div>
+                <div className="text-xs text-muted-foreground mt-1 leading-tight">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -206,14 +206,14 @@ export default function Index() {
       </section>
 
       {/* TYPES */}
-      <section id="types" className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+      <section id="types" className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
             <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">01 / Технологии</span>
-            <h2 className="text-4xl font-black text-white mt-3">Виды 3D печати</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-white mt-3">Виды 3D печати</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-5 md:gap-8">
             {/* PHOTOPOLYMER */}
             <div className="card-glow bg-card rounded-xl overflow-hidden group">
               <div className="relative h-56 overflow-hidden">
@@ -229,7 +229,7 @@ export default function Index() {
                 <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                   Ультрафиолетовое отверждение смолы слой за слоем. Обеспечивает исключительную детализацию — идеально для ювелирных изделий, миниатюр и прецизионных прототипов.
                 </p>
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                   {[
                     { icon: "Maximize2", text: "Точность 0.01–0.05 мм" },
                     { icon: "Layers", text: "Слой 25–100 мкм" },
@@ -276,7 +276,7 @@ export default function Index() {
                 <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
                   Послойное нанесение расплавленного пластика. Широкий выбор материалов от гибких до инженерных. Оптимально для функциональных деталей и крупных изделий.
                 </p>
-                <div className="grid grid-cols-2 gap-3 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                   {[
                     { icon: "Maximize2", text: "Точность 0.1–0.4 мм" },
                     { icon: "Layers", text: "Слой 0.1–0.4 мм" },
@@ -319,7 +319,7 @@ export default function Index() {
             <h2 className="text-3xl font-black text-white mt-3">Дополнительные услуги</h2>
           </div>
           <div className="max-w-3xl mx-auto grid md:grid-cols-1 gap-4">
-            <div className="card-glow bg-card rounded-xl p-6 flex items-center gap-6">
+            <div className="card-glow bg-card rounded-xl p-5 md:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
                 <Icon name="PenTool" size={22} className="text-blue-400" />
               </div>
@@ -328,8 +328,8 @@ export default function Index() {
                 <p className="text-sm text-muted-foreground">Создадим готовую 3D модель по вашему чертежу, фотографии или эскизу от руки — файл готов в течении 2–4 дней.
                 <span className="block text-xs text-muted-foreground/60 mt-2">* Услуга не относится к художественным моделям.</span></p>
               </div>
-              <div className="text-right flex-shrink-0">
-                <div className="text-2xl font-black text-white font-mono-code">от 1 500 ₽</div>
+              <div className="sm:text-right flex-shrink-0">
+                <div className="text-xl md:text-2xl font-black text-white font-mono-code">от 1 500 ₽</div>
                 <div className="text-xs text-muted-foreground mt-0.5">за модель</div>
               </div>
             </div>
@@ -338,12 +338,12 @@ export default function Index() {
       </section>
 
       {/* CALCULATOR */}
-      <section id="calculator" className="py-24 bg-secondary/20 bg-grid">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+      <section id="calculator" className="py-16 md:py-24 bg-secondary/20 bg-grid">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
             <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">02 / Калькулятор</span>
-            <h2 className="text-4xl font-black text-white mt-3">Расчёт стоимости</h2>
-            <p className="text-muted-foreground mt-3 max-w-lg mx-auto">Введите объём модели из вашей слайсер-программы (Chitubox, PrusaSlicer и др.)</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white mt-3">Расчёт стоимости</h2>
+            <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm md:text-base">Введите объём модели из вашей слайсер-программы (Chitubox, PrusaSlicer и др.)</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -352,22 +352,22 @@ export default function Index() {
               <div className="flex border-b border-border">
                 <button
                   onClick={() => { setCalcType("photo"); setCalcMaterial("standard"); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${calcType === "photo" ? "bg-blue-500/10 text-blue-400 border-b-2 border-blue-500" : "text-muted-foreground hover:text-white"}`}
+                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-3 sm:py-4 text-xs sm:text-sm font-semibold transition-colors ${calcType === "photo" ? "bg-blue-500/10 text-blue-400 border-b-2 border-blue-500" : "text-muted-foreground hover:text-white"}`}
                 >
-                  <Icon name="Droplets" size={16} />
+                  <Icon name="Droplets" size={15} />
                   Фотополимерная
                 </button>
                 <button
                   onClick={() => { setCalcType("extrusion"); setCalcMaterial("pla"); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 text-sm font-semibold transition-colors ${calcType === "extrusion" ? "bg-blue-500/10 text-blue-400 border-b-2 border-blue-500" : "text-muted-foreground hover:text-white"}`}
+                  className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-3 sm:py-4 text-xs sm:text-sm font-semibold transition-colors ${calcType === "extrusion" ? "bg-blue-500/10 text-blue-400 border-b-2 border-blue-500" : "text-muted-foreground hover:text-white"}`}
                 >
-                  <Icon name="Layers" size={16} />
+                  <Icon name="Layers" size={15} />
                   Экструзионная
                 </button>
               </div>
 
-              <div className="p-6 md:p-8">
-                <div className="grid md:grid-cols-2 gap-8">
+              <div className="p-4 sm:p-6 md:p-8">
+                <div className="grid md:grid-cols-2 gap-5 md:gap-8">
                   {/* INPUTS */}
                   <div className="space-y-6">
                     <div>
@@ -459,7 +459,7 @@ export default function Index() {
                           onChange={e => setVolume(e.target.value)}
                           min="0.1"
                           step="0.1"
-                          className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-2xl font-black font-mono-code focus:outline-none focus:border-blue-500/60 transition-colors"
+                          className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-xl sm:text-2xl font-black font-mono-code focus:outline-none focus:border-blue-500/60 transition-colors"
                           placeholder="0.0"
                         />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-mono-code">см³</span>
@@ -518,8 +518,8 @@ export default function Index() {
                       <div className="border-t border-blue-500/20 pt-4 flex items-end justify-between">
                         <span className="text-muted-foreground text-sm">Итого</span>
                         <div className="text-right">
-                          <div className="text-4xl font-black text-white font-mono-code">
-                            {vol > 0 ? totalPrice.toFixed(0) : "—"} <span className="text-2xl">₽</span>
+                          <div className="text-3xl sm:text-4xl font-black text-white font-mono-code">
+                            {vol > 0 ? totalPrice.toFixed(0) : "—"} <span className="text-xl sm:text-2xl">₽</span>
                           </div>
                           {vol <= 0 && <div className="text-xs text-muted-foreground">введите объём модели</div>}
                         </div>
@@ -544,15 +544,15 @@ export default function Index() {
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+      <section id="about" className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
             <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">03 / О нас</span>
-            <h2 className="text-4xl font-black text-white mt-3">О компании</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-white mt-3">О компании</h2>
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-16">
               <div>
                 <h3 className="text-2xl font-black text-white mb-4">Производство с точными допусками</h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
@@ -562,7 +562,7 @@ export default function Index() {
                   Работаем с частными клиентами и юридическими лицами. Готовы к серийному производству, штучным заказам и сложным проектам с нестандартными требованиями.
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 {[
                   { icon: "Award", title: "Гарантия качества", desc: "Контроль на каждом этапе" },
                   { icon: "Zap", title: "Быстрые сроки", desc: "От 24 часов до выдачи" },
@@ -583,7 +583,7 @@ export default function Index() {
             {/* PROCESS */}
             <div className="border-t border-border pt-12">
               <h3 className="text-xl font-black text-white text-center mb-8">Как это работает</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {[
                   { step: "01", title: "Загрузите файл", desc: "Отправьте STL/OBJ модель нам на почту или в мессенджер" },
                   { step: "02", title: "Расчёт", desc: "Рассчитаем точную стоимость и уточним требования" },
@@ -591,7 +591,7 @@ export default function Index() {
                   { step: "04", title: "Получите", desc: "Самовывоз или доставка курьером / почтой" },
                 ].map(item => (
                   <div key={item.step} className="text-center">
-                    <div className="text-4xl font-black font-mono-code text-blue-500/20 mb-2">{item.step}</div>
+                    <div className="text-3xl md:text-4xl font-black font-mono-code text-blue-500/20 mb-2">{item.step}</div>
                     <div className="font-bold text-white text-sm mb-1">{item.title}</div>
                     <div className="text-xs text-muted-foreground leading-relaxed">{item.desc}</div>
                   </div>
@@ -603,15 +603,15 @@ export default function Index() {
       </section>
 
       {/* CONTACTS */}
-      <section id="contacts" className="py-24 bg-secondary/20 bg-grid">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+      <section id="contacts" className="py-16 md:py-24 bg-secondary/20 bg-grid">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-10 md:mb-16">
             <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">04 / Контакты</span>
-            <h2 className="text-4xl font-black text-white mt-3">Свяжитесь с нами</h2>
-            <p className="text-muted-foreground mt-3">Отправьте файл модели и получите точный расчёт в течение часа</p>
+            <h2 className="text-3xl md:text-4xl font-black text-white mt-3">Свяжитесь с нами</h2>
+            <p className="text-muted-foreground mt-3 text-sm md:text-base">Отправьте файл модели и получите точный расчёт в течение часа</p>
           </div>
 
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-5 md:gap-8">
             <div className="card-glow bg-card rounded-xl p-6 space-y-6">
               <h3 className="font-bold text-white text-lg">Контактная информация</h3>
 
