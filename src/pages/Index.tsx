@@ -311,6 +311,31 @@ export default function Index() {
         </div>
       </section>
 
+      {/* EXTRA SERVICES */}
+      <section className="py-16 bg-secondary/10">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-10">
+            <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">Дополнительно</span>
+            <h2 className="text-3xl font-black text-white mt-3">Дополнительные услуги</h2>
+          </div>
+          <div className="max-w-3xl mx-auto grid md:grid-cols-1 gap-4">
+            <div className="card-glow bg-card rounded-xl p-6 flex items-center gap-6">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <Icon name="PenTool" size={22} className="text-blue-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-black text-white mb-1">3D моделирование по чертежам или эскизам</h3>
+                <p className="text-sm text-muted-foreground">Создадим готовую 3D модель по вашему чертежу, фотографии или эскизу от руки — файл сразу готов к печати.</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <div className="text-2xl font-black text-white font-mono-code">от 1 500 ₽</div>
+                <div className="text-xs text-muted-foreground mt-0.5">за модель</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CALCULATOR */}
       <section id="calculator" className="py-24 bg-secondary/20 bg-grid">
         <div className="container mx-auto px-6">
