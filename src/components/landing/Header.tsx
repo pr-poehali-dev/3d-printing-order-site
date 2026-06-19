@@ -1,14 +1,15 @@
 import Icon from "@/components/ui/icon";
-import { PHOTO_MATERIALS, EXTRUSION_MATERIALS, PHOTO_IMAGE, EXTRUSION_IMAGE, LOGO_IMAGE, navLinks } from "./constants";
+import { PHOTO_MATERIALS, EXTRUSION_MATERIALS, PHOTO_IMAGE, EXTRUSION_IMAGE, LOGO_IMAGE, navLinks, PrintType } from "./constants";
 
 interface HeaderProps {
   activeSection: string;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (v: boolean) => void;
   scrollTo: (id: string) => void;
+  selectPrintType: (type: PrintType) => void;
 }
 
-export default function Header({ activeSection, mobileMenuOpen, setMobileMenuOpen, scrollTo }: HeaderProps) {
+export default function Header({ activeSection, mobileMenuOpen, setMobileMenuOpen, scrollTo, selectPrintType }: HeaderProps) {
   return (
     <>
       {/* NAV */}
@@ -131,7 +132,7 @@ export default function Header({ activeSection, mobileMenuOpen, setMobileMenuOpe
 
           <div className="grid md:grid-cols-2 gap-5 md:gap-8">
             {/* PHOTOPOLYMER */}
-            <div className="card-glow bg-card rounded-xl overflow-hidden group">
+            <div onClick={() => selectPrintType("photo")} className="card-glow bg-card rounded-xl overflow-hidden group cursor-pointer">
               <div className="relative h-56 overflow-hidden">
                 <img src={PHOTO_IMAGE} alt="Фотополимерная печать" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
@@ -178,7 +179,7 @@ export default function Header({ activeSection, mobileMenuOpen, setMobileMenuOpe
             </div>
 
             {/* EXTRUSION */}
-            <div className="card-glow bg-card rounded-xl overflow-hidden group">
+            <div onClick={() => selectPrintType("extrusion")} className="card-glow bg-card rounded-xl overflow-hidden group cursor-pointer">
               <div className="relative h-56 overflow-hidden">
                 <img src={EXTRUSION_IMAGE} alt="Экструзионная печать" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />

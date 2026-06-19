@@ -71,6 +71,12 @@ export default function Index() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const selectPrintType = (type: PrintType) => {
+    setCalcType(type);
+    setCalcMaterial(type === "photo" ? "standard" : "pla");
+    scrollTo("calculator");
+  };
+
   const submitOrder = async () => {
     setOrderError("");
     if (!orderName.trim() || !orderContact.trim()) {
@@ -114,6 +120,7 @@ export default function Index() {
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         scrollTo={scrollTo}
+        selectPrintType={selectPrintType}
       />
 
       <Calculator
