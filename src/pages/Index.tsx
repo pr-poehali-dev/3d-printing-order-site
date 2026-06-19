@@ -349,17 +349,17 @@ export default function Index() {
           <div className="max-w-sm sm:max-w-4xl mx-auto">
             <div className="card-glow bg-card rounded-xl overflow-hidden">
               {/* TYPE TOGGLE */}
-              <div className="flex flex-col sm:flex-row border-b border-border">
+              <div className="flex flex-col border-b border-border">
                 <button
                   onClick={() => { setCalcType("photo"); setCalcMaterial("standard"); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 text-sm font-semibold transition-colors border-b sm:border-b-0 border-border ${calcType === "photo" ? "bg-blue-500/10 text-blue-400 sm:border-b-2 sm:border-blue-500" : "text-muted-foreground hover:text-white"}`}
+                  className={`flex items-center justify-center gap-2 py-3 sm:py-4 text-sm font-semibold transition-colors border-b border-border ${calcType === "photo" ? "bg-blue-500/10 text-blue-400" : "text-muted-foreground hover:text-white"}`}
                 >
                   <Icon name="Droplets" size={15} />
                   Фотополимерная
                 </button>
                 <button
                   onClick={() => { setCalcType("extrusion"); setCalcMaterial("pla"); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 text-sm font-semibold transition-colors ${calcType === "extrusion" ? "bg-blue-500/10 text-blue-400 sm:border-b-2 sm:border-blue-500" : "text-muted-foreground hover:text-white"}`}
+                  className={`flex items-center justify-center gap-2 py-3 sm:py-4 text-sm font-semibold transition-colors ${calcType === "extrusion" ? "bg-blue-500/10 text-blue-400" : "text-muted-foreground hover:text-white"}`}
                 >
                   <Icon name="Layers" size={15} />
                   Экструзионная
