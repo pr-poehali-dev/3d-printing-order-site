@@ -122,6 +122,29 @@ export default function Header({ activeSection, mobileMenuOpen, setMobileMenuOpe
         </div>
       </section>
 
+      {/* PROCESS */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-xl font-black text-white text-center mb-8">Как это работает</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {[
+                { step: "01", title: "Загрузите файл", desc: "Отправьте STL/OBJ модель нам на почту или в мессенджер" },
+                { step: "02", title: "Расчёт", desc: "Рассчитаем точную стоимость и уточним требования" },
+                { step: "03", title: "Производство", desc: "Печатаем с контролем качества и постобработкой" },
+                { step: "04", title: "Получите", desc: "Самовывоз или доставка курьером / почтой" },
+              ].map(item => (
+                <div key={item.step} className="text-center">
+                  <div className="text-3xl md:text-4xl font-black font-mono-code text-blue-500/20 mb-2">{item.step}</div>
+                  <div className="font-bold text-white text-sm mb-1">{item.title}</div>
+                  <div className="text-xs text-muted-foreground leading-relaxed">{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* TYPES */}
       <section id="types" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
