@@ -459,7 +459,7 @@ export default function Index() {
                           onChange={e => setVolume(e.target.value)}
                           min="0.1"
                           step="0.1"
-                          className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-xl sm:text-2xl font-black font-mono-code focus:outline-none focus:border-blue-500/60 transition-colors"
+                          className="no-spinner w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-xl sm:text-2xl font-black font-mono-code focus:outline-none focus:border-blue-500/60 transition-colors"
                           placeholder="0.0"
                         />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-mono-code">см³</span>
