@@ -481,7 +481,7 @@ export default function Index() {
                           value={quantity}
                           onChange={e => setQuantity(e.target.value)}
                           min="1"
-                          className="flex-1 min-w-0 bg-secondary/50 border border-border rounded-lg px-4 py-2.5 text-white text-xl font-black font-mono-code text-center focus:outline-none focus:border-blue-500/60 transition-colors"
+                          className="no-spinner flex-1 min-w-0 bg-secondary/50 border border-border rounded-lg px-4 py-2.5 text-white text-xl font-black font-mono-code text-center focus:outline-none focus:border-blue-500/60 transition-colors"
                         />
                         <button
                           onClick={() => setQuantity(q => String(parseInt(q) + 1))}
