@@ -338,7 +338,7 @@ export default function Index() {
       </section>
 
       {/* CALCULATOR */}
-      <section id="calculator" className="py-16 md:py-24 bg-secondary/20 bg-grid">
+      <section id="calculator" className="py-16 md:py-24 bg-secondary/20 bg-grid overflow-x-hidden">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
             <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">02 / Калькулятор</span>
@@ -346,7 +346,7 @@ export default function Index() {
             <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm md:text-base">Введите объём модели из вашей слайсер-программы (Chitubox, PrusaSlicer и др.)</p>
           </div>
 
-          <div className="max-w-sm sm:max-w-4xl mx-auto">
+          <div className="w-full max-w-md sm:max-w-4xl mx-auto">
             <div className="card-glow bg-card rounded-xl overflow-hidden">
               {/* TYPE TOGGLE */}
               <div className="flex flex-col gap-3 p-4 border-b border-border">
