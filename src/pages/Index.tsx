@@ -15,7 +15,7 @@ export default function Index() {
   const [activeSection, setActiveSection] = useState<string>("home");
   const [calcType, setCalcType] = useState<PrintType>("photo");
   const [calcMaterial, setCalcMaterial] = useState("standard");
-  const [volume, setVolume] = useState<string>("10");
+  const [volume, setVolume] = useState<string>("0");
   const [quantity, setQuantity] = useState<string>("1");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [imageAnalyzing, setImageAnalyzing] = useState(false);
