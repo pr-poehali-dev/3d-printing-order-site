@@ -15,6 +15,25 @@
 }
 
 @layer base {
+  body {
+    cursor: default;
+  }
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+  a,
+  button,
+  select,
+  label,
+  [role="button"],
+  [onclick] {
+    cursor: pointer;
+  }
+}
+
+@layer base {
   :root {
     --background: 222 47% 6%;
     --foreground: 210 40% 96%;
