@@ -369,7 +369,7 @@ export default function Index() {
               <div className="p-4 sm:p-6 md:p-8">
                 <div className="grid md:grid-cols-2 gap-5 md:gap-8">
                   {/* INPUTS */}
-                  <div className="space-y-6">
+                  <div className="space-y-6 min-w-0">
                     <div>
                       <label className="text-xs font-mono-code text-blue-400 uppercase tracking-wider mb-3 block">Материал</label>
                       <div className="grid grid-cols-1 gap-2">
@@ -377,13 +377,13 @@ export default function Index() {
                           <button
                             key={m.id}
                             onClick={() => setCalcMaterial(m.id)}
-                            className={`w-full flex items-center justify-between p-3 rounded-lg border text-left transition-all ${calcMaterial === m.id ? "border-blue-500/60 bg-blue-500/10" : "border-border hover:border-blue-500/30 hover:bg-secondary/50"}`}
+                            className={`w-full flex items-center justify-between gap-2 p-3 rounded-lg border text-left transition-all ${calcMaterial === m.id ? "border-blue-500/60 bg-blue-500/10" : "border-border hover:border-blue-500/30 hover:bg-secondary/50"}`}
                           >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 min-w-0">
                               <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: m.color }} />
-                              <div>
+                              <div className="min-w-0">
                                 <div className={`text-sm font-semibold ${calcMaterial === m.id ? "text-white" : "text-muted-foreground"}`}>{m.name}</div>
-                                <div className="text-xs text-muted-foreground">{m.desc}</div>
+                                <div className="text-xs text-muted-foreground truncate">{m.desc}</div>
                               </div>
                             </div>
                             <div className={`text-sm font-bold font-mono-code flex-shrink-0 ${calcMaterial === m.id ? "text-blue-400" : "text-muted-foreground"}`}>
@@ -396,7 +396,7 @@ export default function Index() {
                   </div>
 
                   {/* VOLUME & RESULT */}
-                  <div className="space-y-6">
+                  <div className="space-y-6 min-w-0">
                     {/* IMAGE ANALYZE */}
                     <div>
                       <label className="text-xs font-mono-code text-blue-400 uppercase tracking-wider mb-3 block">Расчёт по фото с размерами</label>
@@ -481,7 +481,7 @@ export default function Index() {
                           value={quantity}
                           onChange={e => setQuantity(e.target.value)}
                           min="1"
-                          className="flex-1 bg-secondary/50 border border-border rounded-lg px-4 py-2.5 text-white text-xl font-black font-mono-code text-center focus:outline-none focus:border-blue-500/60 transition-colors"
+                          className="flex-1 min-w-0 bg-secondary/50 border border-border rounded-lg px-4 py-2.5 text-white text-xl font-black font-mono-code text-center focus:outline-none focus:border-blue-500/60 transition-colors"
                         />
                         <button
                           onClick={() => setQuantity(q => String(parseInt(q) + 1))}
