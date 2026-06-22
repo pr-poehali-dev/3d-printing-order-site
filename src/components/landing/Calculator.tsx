@@ -254,7 +254,6 @@ export default function Calculator({
                     onClick={() => scrollTo("contacts")}
                     className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
-                    <Icon name="Send" size={16} />
                     Отправить заказ
                   </button>
                 </div>
