@@ -174,7 +174,11 @@ export default function Calculator({
                       <input
                         type="number"
                         value={volume}
-                        onChange={e => setVolume(e.target.value)}
+                        onChange={e => {
+                          let v = e.target.value;
+                          if (/^0\d/.test(v)) v = v.replace(/^0+/, "");
+                          setVolume(v);
+                        }}
                         min="0.1"
                         step="0.1"
                         className="no-spinner w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-xl sm:text-2xl font-black font-mono-code focus:outline-none focus:border-blue-500/60 transition-colors"
