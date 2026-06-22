@@ -159,7 +159,7 @@ export default function ContactSection({
                     onClick={submitOrder}
                     className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
-                    <Icon name={orderSending ? "Loader" : "Send"} size={16} className={orderSending ? "animate-spin" : ""} />
+                    {orderSending && <Icon name="Loader" size={16} className="animate-spin" />}
                     {orderSending ? "Отправляем..." : "Отправить заявку"}
                   </button>
                 </div>
