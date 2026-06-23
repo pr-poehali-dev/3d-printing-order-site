@@ -9,16 +9,8 @@ from email.mime.multipart import MIMEMultipart
 import boto3
 
 
-def upload_to_s3(s3, file_b64, filename, content_type):
-    file_bytes = base64.b64decode(file_b64)
-    safe_name = filename.replace('/', '_').replace('\\', '_')
-    key = f"orders/{uuid.uuid4().hex}_{safe_name}"
-    s3.put_object(Bucket='files', Key=key, Body=file_bytes, ContentType=content_type)
-    return f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
-
-
 def handler(event: dict, context) -> dict:
-    """Отправка заявки с сайта на почту DATAR3D@yandex.ru"""
+    """Отправка заявки и загрузка файлов для DATAR3D@yandex.ru"""
     cors_headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -29,6 +21,33 @@ def handler(event: dict, context) -> dict:
         return {'statusCode': 200, 'headers': cors_headers, 'body': ''}
 
     body = json.loads(event.get('body') or '{}')
+    action = body.get('action', 'send')
+
+    # --- Загрузка одного файла ---
+    if action == 'upload':
+        file_b64 = body.get('file')
+        filename = (body.get('filename') or '').strip()
+        if not file_b64 or not filename:
+            return {'statusCode': 400, 'headers': cors_headers, 'body': json.dumps({'error': 'file and filename required'})}
+
+        file_bytes = base64.b64decode(file_b64)
+        safe_name = filename.replace('/', '_').replace('\\', '_')
+        key = f"orders/{uuid.uuid4().hex}_{safe_name}"
+        ext = filename.rsplit('.', 1)[-1].lower()
+        ct_map = {'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp', 'gif': 'image/gif'}
+        content_type = ct_map.get(ext, 'application/octet-stream')
+
+        s3 = boto3.client(
+            's3',
+            endpoint_url='https://bucket.poehali.dev',
+            aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+        )
+        s3.put_object(Bucket='files', Key=key, Body=file_bytes, ContentType=content_type)
+        file_url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
+        return {'statusCode': 200, 'headers': cors_headers, 'body': json.dumps({'url': file_url})}
+
+    # --- Отправка заявки ---
     name = body.get('name', '').strip()
     contact = body.get('contact', '').strip()
     print_type = body.get('print_type', '').strip()
@@ -40,44 +59,19 @@ def handler(event: dict, context) -> dict:
     calc_quantity = body.get('calc_quantity', 1)
     calc_price_per_piece = body.get('calc_price_per_piece', 0)
     calc_total_price = body.get('calc_total_price', 0)
-    model_file = body.get('model_file')
+    model_url = (body.get('model_url') or '').strip()
     model_filename = (body.get('model_filename') or '').strip()
-    photo_file = body.get('photo_file')
+    photo_url = (body.get('photo_url') or '').strip()
     photo_filename = (body.get('photo_filename') or '').strip()
 
     if not name or not contact:
-        return {
-            'statusCode': 400,
-            'headers': cors_headers,
-            'body': json.dumps({'error': 'Укажите имя и контакт'})
-        }
-
-    s3 = boto3.client(
-        's3',
-        endpoint_url='https://bucket.poehali.dev',
-        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
-    )
-
-    file_url = ''
-    if model_file and model_filename:
-        file_url = upload_to_s3(s3, model_file, model_filename, 'application/octet-stream')
-
-    photo_url = ''
-    if photo_file and photo_filename:
-        ext = photo_filename.rsplit('.', 1)[-1].lower()
-        ct_map = {'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp', 'gif': 'image/gif'}
-        photo_ct = ct_map.get(ext, 'image/jpeg')
-        photo_url = upload_to_s3(s3, photo_file, photo_filename, photo_ct)
+        return {'statusCode': 400, 'headers': cors_headers, 'body': json.dumps({'error': 'Укажите имя и контакт'})}
 
     smtp_user = os.environ['YANDEX_SMTP_USER']
     smtp_password = os.environ['YANDEX_SMTP_PASSWORD']
     recipient = 'DATAR3D@yandex.ru'
 
-    print_type_label = {
-        'photo': 'Фотополимерная',
-        'extrusion': 'Экструзионная',
-    }.get(print_type, print_type or 'Не указан')
+    print_type_label = {'photo': 'Фотополимерная', 'extrusion': 'Экструзионная'}.get(print_type, print_type or 'Не указан')
 
     calc_block = ''
     if calc_material and calc_volume:
@@ -93,12 +87,12 @@ def handler(event: dict, context) -> dict:
 """
 
     file_block = ''
-    if file_url:
-        file_block = f'<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">3D-модель</td><td style="padding:8px"><a href="{file_url}">{model_filename}</a></td></tr>'
+    if model_url:
+        file_block = f'<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">3D-модель</td><td style="padding:8px"><a href="{model_url}">{model_filename or "Скачать"}</a></td></tr>'
 
     photo_block = ''
     if photo_url:
-        photo_block = f'''<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Фото</td><td style="padding:8px"><a href="{photo_url}">{photo_filename}</a><br><img src="{photo_url}" style="max-width:300px;max-height:300px;margin-top:6px;border-radius:6px" /></td></tr>'''
+        photo_block = f'''<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Фото</td><td style="padding:8px"><a href="{photo_url}">{photo_filename or "Открыть"}</a><br><img src="{photo_url}" style="max-width:300px;max-height:300px;margin-top:6px;border-radius:6px" /></td></tr>'''
 
     html_body = f"""
 <h2>Новая заявка с сайта PRINT3D</h2>
@@ -124,8 +118,4 @@ def handler(event: dict, context) -> dict:
         server.login(smtp_user, smtp_password)
         server.sendmail(smtp_user, recipient, msg.as_string())
 
-    return {
-        'statusCode': 200,
-        'headers': cors_headers,
-        'body': json.dumps({'ok': True})
-    }
+    return {'statusCode': 200, 'headers': cors_headers, 'body': json.dumps({'ok': True})}

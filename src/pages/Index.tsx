@@ -111,31 +111,38 @@ export default function Index() {
     }
     setOrderSending(true);
     try {
-      let modelFile: string | undefined;
-      let modelFilename: string | undefined;
-      if (orderModelFile) {
-        modelFile = await fileToBase64(orderModelFile);
-        modelFilename = orderModelFile.name;
-      }
-      let photoFile: string | undefined;
-      let photoFilename: string | undefined;
-      if (orderPhotoFile) {
-        photoFile = await fileToBase64(orderPhotoFile);
-        photoFilename = orderPhotoFile.name;
-      }
+      const uploadFile = async (file: File): Promise<string> => {
+        const b64 = await fileToBase64(file);
+        const r = await fetch(SEND_ORDER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "upload", file: b64, filename: file.name }),
+        });
+        if (!r.ok) throw new Error("upload failed");
+        const data = await r.json();
+        return data.url as string;
+      };
+
+      let modelUrl: string | undefined;
+      if (orderModelFile) modelUrl = await uploadFile(orderModelFile);
+
+      let photoUrl: string | undefined;
+      if (orderPhotoFile) photoUrl = await uploadFile(orderPhotoFile);
+
       const res = await fetch(SEND_ORDER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          action: "send",
           name: orderName,
           contact: orderContact,
           print_type: orderPrintType,
           description: orderDescription,
           delivery: orderDelivery,
-          model_file: modelFile,
-          model_filename: modelFilename,
-          photo_file: photoFile,
-          photo_filename: photoFilename,
+          model_url: modelUrl,
+          model_filename: orderModelFile?.name,
+          photo_url: photoUrl,
+          photo_filename: orderPhotoFile?.name,
           calc_type: calcType,
           calc_material: selectedMaterial.name,
           calc_volume: vol,
