@@ -29,7 +29,16 @@ export default function Index() {
   const [orderSent, setOrderSent] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [orderAgreed, setOrderAgreed] = useState(false);
+  const [orderModelFile, setOrderModelFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve((reader.result as string).split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
   const selectedMaterial = materials.find(m => m.id === calcMaterial) || materials[0];
@@ -88,8 +97,18 @@ export default function Index() {
       setOrderError("Необходимо принять условия договора оферты");
       return;
     }
+    if (orderModelFile && orderModelFile.size > 25 * 1024 * 1024) {
+      setOrderError("Файл слишком большой. Максимум 25 МБ.");
+      return;
+    }
     setOrderSending(true);
     try {
+      let modelFile: string | undefined;
+      let modelFilename: string | undefined;
+      if (orderModelFile) {
+        modelFile = await fileToBase64(orderModelFile);
+        modelFilename = orderModelFile.name;
+      }
       const res = await fetch(SEND_ORDER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -98,6 +117,8 @@ export default function Index() {
           contact: orderContact,
           print_type: orderPrintType,
           description: orderDescription,
+          model_file: modelFile,
+          model_filename: modelFilename,
           calc_type: calcType,
           calc_material: selectedMaterial.name,
           calc_volume: vol,
@@ -168,6 +189,8 @@ export default function Index() {
         orderError={orderError}
         orderAgreed={orderAgreed}
         setOrderAgreed={setOrderAgreed}
+        orderModelFile={orderModelFile}
+        setOrderModelFile={setOrderModelFile}
         submitOrder={submitOrder}
       />
     </div>

@@ -17,6 +17,8 @@ interface ContactSectionProps {
   orderError: string;
   orderAgreed: boolean;
   setOrderAgreed: (v: boolean) => void;
+  orderModelFile: File | null;
+  setOrderModelFile: (v: File | null) => void;
   submitOrder: () => void;
 }
 
@@ -35,6 +37,8 @@ export default function ContactSection({
   orderError,
   orderAgreed,
   setOrderAgreed,
+  orderModelFile,
+  setOrderModelFile,
   submitOrder,
 }: ContactSectionProps) {
   return (
@@ -124,7 +128,7 @@ export default function ContactSection({
                   </div>
                   <p className="text-white font-semibold">Заявка отправлена!</p>
                   <p className="text-muted-foreground text-sm">Мы свяжемся с вами в ближайшее время</p>
-                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
+                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); setOrderModelFile(null); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -158,6 +162,34 @@ export default function ContactSection({
                     onChange={e => setOrderDescription(e.target.value)}
                     className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
                   />
+
+                  {orderModelFile ? (
+                    <div className="flex items-center justify-between gap-3 bg-secondary/50 border border-blue-500/40 rounded-lg px-4 py-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Icon name="FileBox" size={18} className="text-blue-400 flex-shrink-0" />
+                        <span className="text-white text-sm truncate">{orderModelFile.name}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setOrderModelFile(null)}
+                        className="text-muted-foreground hover:text-red-400 transition-colors flex-shrink-0"
+                      >
+                        <Icon name="X" size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border hover:border-blue-500/50 rounded-lg px-4 py-3 cursor-pointer transition-colors text-muted-foreground hover:text-blue-400 text-sm">
+                      <Icon name="Upload" size={16} />
+                      Прикрепить 3D-модель (STL, OBJ, STEP, 3MF)
+                      <input
+                        type="file"
+                        accept=".stl,.obj,.step,.stp,.3mf,.ply,.gcode,.zip"
+                        className="hidden"
+                        onChange={e => { const f = e.target.files?.[0]; if (f) setOrderModelFile(f); }}
+                      />
+                    </label>
+                  )}
+
                   <label className="flex items-start gap-3 cursor-pointer select-none">
                     <input
                       type="checkbox"
