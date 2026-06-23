@@ -1,4 +1,5 @@
 import { RefObject } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { PrintType, ImageResult } from "./constants";
 
@@ -31,6 +32,8 @@ interface CalculatorProps {
   fileInputRef: RefObject<HTMLInputElement>;
   handleImageUpload: (file: File) => void;
   scrollTo: (id: string) => void;
+  orderAgreed: boolean;
+  setOrderAgreed: (v: boolean) => void;
 }
 
 export default function Calculator({
@@ -54,6 +57,8 @@ export default function Calculator({
   fileInputRef,
   handleImageUpload,
   scrollTo,
+  orderAgreed,
+  setOrderAgreed,
 }: CalculatorProps) {
   return (
     <section id="calculator" className="py-16 md:py-24 bg-secondary/20 bg-grid overflow-x-hidden">
@@ -250,9 +255,25 @@ export default function Calculator({
                     <p className="text-xs text-muted-foreground mt-4">* Финальная стоимость может включать постобработку и доставку. Точная цена — после анализа файла.</p>
                   </div>
 
+                  <label className="flex items-start gap-3 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={orderAgreed}
+                      onChange={e => setOrderAgreed(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 accent-blue-500 cursor-pointer"
+                    />
+                    <span className="text-xs text-muted-foreground leading-relaxed">
+                      Я ознакомлен(а) и принимаю условия{" "}
+                      <Link to="/offer" target="_blank" className="text-blue-400 hover:underline">
+                        договора публичной оферты
+                      </Link>{" "}
+                      и даю согласие на обработку персональных данных.
+                    </span>
+                  </label>
                   <button
                     onClick={() => scrollTo("contacts")}
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
+                    disabled={!orderAgreed}
+                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
                     Отправить заказ
                   </button>

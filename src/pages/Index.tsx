@@ -149,6 +149,8 @@ export default function Index() {
         fileInputRef={fileInputRef}
         handleImageUpload={handleImageUpload}
         scrollTo={scrollTo}
+        orderAgreed={orderAgreed}
+        setOrderAgreed={setOrderAgreed}
       />
 
       <ContactSection
