@@ -47,8 +47,9 @@ export default function Index() {
   const qty = parseInt(quantity) || 1;
   const MIN_ORDER = 2000;
   const basePrice = vol * selectedMaterial.pricePerCm3;
-  const totalPrice = Math.max(basePrice * qty, vol > 0 ? MIN_ORDER : 0);
-  const pricePerPiece = qty > 0 ? totalPrice / qty : basePrice;
+  const totalPrice = basePrice * qty;
+  const pricePerPiece = basePrice;
+  const isBelowMin = vol > 0 && totalPrice < MIN_ORDER;
 
   const handleImageUpload = async (file: File) => {
     setImageResult(null);
@@ -178,7 +179,7 @@ export default function Index() {
         qty={qty}
         pricePerPiece={pricePerPiece}
         totalPrice={totalPrice}
-        isMinOrder={vol > 0 && basePrice * qty < MIN_ORDER}
+        isBelowMin={isBelowMin}
         imageAnalyzing={imageAnalyzing}
         imageResult={imageResult}
         previewUrl={previewUrl}
@@ -208,6 +209,7 @@ export default function Index() {
         setOrderModelFile={setOrderModelFile}
         orderPhotoFile={orderPhotoFile}
         setOrderPhotoFile={setOrderPhotoFile}
+        isBelowMin={isBelowMin}
         submitOrder={submitOrder}
       />
     </div>

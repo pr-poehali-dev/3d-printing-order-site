@@ -21,6 +21,7 @@ interface ContactSectionProps {
   setOrderModelFile: (v: File | null) => void;
   orderPhotoFile: File | null;
   setOrderPhotoFile: (v: File | null) => void;
+  isBelowMin: boolean;
   submitOrder: () => void;
 }
 
@@ -43,6 +44,7 @@ export default function ContactSection({
   setOrderModelFile,
   orderPhotoFile,
   setOrderPhotoFile,
+  isBelowMin,
   submitOrder,
 }: ContactSectionProps) {
   return (
@@ -237,8 +239,11 @@ export default function ContactSection({
                     </span>
                   </label>
                   {orderError && <p className="text-red-400 text-sm">{orderError}</p>}
+                  {isBelowMin && (
+                    <p className="text-yellow-400 text-xs text-center">Минимальная стоимость заказа — 2 000 ₽. Увеличьте объём или количество в калькуляторе.</p>
+                  )}
                   <button
-                    disabled={orderSending}
+                    disabled={orderSending || isBelowMin}
                     onClick={submitOrder}
                     className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
