@@ -97,8 +97,8 @@ export default function Index() {
       setOrderError("Необходимо принять условия договора оферты");
       return;
     }
-    if (orderModelFile && orderModelFile.size > 25 * 1024 * 1024) {
-      setOrderError("Файл слишком большой. Максимум 25 МБ.");
+    if (orderModelFile && orderModelFile.size > 500 * 1024 * 1024) {
+      setOrderError("Файл слишком большой. Максимум 500 МБ.");
       return;
     }
     setOrderSending(true);
