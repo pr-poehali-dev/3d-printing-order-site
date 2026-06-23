@@ -90,7 +90,7 @@ export default function ContactSection({
               {[
                 { icon: "Mail", label: "Email", value: "DATAR3D@yandex.ru", href: "mailto:DATAR3D@yandex.ru" },
                 { icon: "Phone", label: "Телефон", value: "+7 (977) 640-69-64", href: "tel:+79776406964" },
-                { icon: "MessageCircle", label: "Telegram", value: "@print3d_bot", href: "#" },
+                { icon: "MessageCircle", label: "Telegram", value: "@DATAR3D", href: "https://t.me/DATAR3D" },
                 { icon: "MapPin", label: "Адрес", value: "г. Москва, Ореховый проезд, д. 29 к. 1", href: "#" },
                 { icon: "Clock", label: "Режим работы", value: "Пн–Пт: 9:00–18:00", href: null },
               ].map(item => (
