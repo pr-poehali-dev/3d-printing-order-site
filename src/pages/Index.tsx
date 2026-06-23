@@ -28,6 +28,7 @@ export default function Index() {
   const [orderSending, setOrderSending] = useState(false);
   const [orderSent, setOrderSent] = useState(false);
   const [orderError, setOrderError] = useState("");
+  const [orderAgreed, setOrderAgreed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
@@ -81,6 +82,10 @@ export default function Index() {
     setOrderError("");
     if (!orderName.trim() || !orderContact.trim()) {
       setOrderError("Укажите имя и контакт");
+      return;
+    }
+    if (!orderAgreed) {
+      setOrderError("Необходимо принять условия договора оферты");
       return;
     }
     setOrderSending(true);
@@ -159,6 +164,8 @@ export default function Index() {
         orderSent={orderSent}
         setOrderSent={setOrderSent}
         orderError={orderError}
+        orderAgreed={orderAgreed}
+        setOrderAgreed={setOrderAgreed}
         submitOrder={submitOrder}
       />
     </div>

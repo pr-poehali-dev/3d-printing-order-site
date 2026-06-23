@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { LOGO_IMAGE } from "./constants";
 
@@ -14,6 +15,8 @@ interface ContactSectionProps {
   orderSent: boolean;
   setOrderSent: (v: boolean) => void;
   orderError: string;
+  orderAgreed: boolean;
+  setOrderAgreed: (v: boolean) => void;
   submitOrder: () => void;
 }
 
@@ -30,6 +33,8 @@ export default function ContactSection({
   orderSent,
   setOrderSent,
   orderError,
+  orderAgreed,
+  setOrderAgreed,
   submitOrder,
 }: ContactSectionProps) {
   return (
@@ -119,7 +124,7 @@ export default function ContactSection({
                   </div>
                   <p className="text-white font-semibold">Заявка отправлена!</p>
                   <p className="text-muted-foreground text-sm">Мы свяжемся с вами в ближайшее время</p>
-                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
+                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -153,6 +158,21 @@ export default function ContactSection({
                     onChange={e => setOrderDescription(e.target.value)}
                     className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
                   />
+                  <label className="flex items-start gap-3 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={orderAgreed}
+                      onChange={e => setOrderAgreed(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 accent-blue-500 cursor-pointer"
+                    />
+                    <span className="text-xs text-muted-foreground leading-relaxed">
+                      Я ознакомлен(а) и принимаю условия{" "}
+                      <Link to="/offer" target="_blank" className="text-blue-400 hover:underline">
+                        договора публичной оферты
+                      </Link>{" "}
+                      и даю согласие на обработку персональных данных.
+                    </span>
+                  </label>
                   {orderError && <p className="text-red-400 text-sm">{orderError}</p>}
                   <button
                     disabled={orderSending}
@@ -179,8 +199,11 @@ export default function ContactSection({
           <div className="text-xs text-muted-foreground text-center">
             Профессиональная 3D печать на заказ. Фотополимер и экструзия.
           </div>
-          <div className="text-xs text-muted-foreground font-mono-code">
-            © 2026
+          <div className="flex items-center gap-4">
+            <Link to="/offer" className="text-xs text-muted-foreground hover:text-blue-400 transition-colors">
+              Договор оферты
+            </Link>
+            <span className="text-xs text-muted-foreground font-mono-code">© 2026</span>
           </div>
         </div>
       </footer>
