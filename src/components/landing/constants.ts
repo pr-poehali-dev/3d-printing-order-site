@@ -35,7 +35,7 @@ export type ImageResult = {
 
 export const navLinks = [
   { id: "home", label: "Главная" },
-  { id: "types", label: "Типы печати" },
+  { id: "types", label: "Виды печати" },
   { id: "calculator", label: "Калькулятор" },
   { id: "about", label: "О компании" },
   { id: "contacts", label: "Контакты" },
