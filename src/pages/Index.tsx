@@ -30,6 +30,7 @@ export default function Index() {
   const [orderError, setOrderError] = useState("");
   const [orderAgreed, setOrderAgreed] = useState(false);
   const [orderModelFile, setOrderModelFile] = useState<File | null>(null);
+  const [orderPhotoFile, setOrderPhotoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fileToBase64 = (file: File): Promise<string> =>
@@ -98,7 +99,11 @@ export default function Index() {
       return;
     }
     if (orderModelFile && orderModelFile.size > 50 * 1024 * 1024) {
-      setOrderError("Файл слишком большой. Максимум 50 МБ.");
+      setOrderError("Файл модели слишком большой. Максимум 50 МБ.");
+      return;
+    }
+    if (orderPhotoFile && orderPhotoFile.size > 10 * 1024 * 1024) {
+      setOrderError("Фото слишком большое. Максимум 10 МБ.");
       return;
     }
     setOrderSending(true);
@@ -108,6 +113,12 @@ export default function Index() {
       if (orderModelFile) {
         modelFile = await fileToBase64(orderModelFile);
         modelFilename = orderModelFile.name;
+      }
+      let photoFile: string | undefined;
+      let photoFilename: string | undefined;
+      if (orderPhotoFile) {
+        photoFile = await fileToBase64(orderPhotoFile);
+        photoFilename = orderPhotoFile.name;
       }
       const res = await fetch(SEND_ORDER_URL, {
         method: "POST",
@@ -119,6 +130,8 @@ export default function Index() {
           description: orderDescription,
           model_file: modelFile,
           model_filename: modelFilename,
+          photo_file: photoFile,
+          photo_filename: photoFilename,
           calc_type: calcType,
           calc_material: selectedMaterial.name,
           calc_volume: vol,
@@ -191,6 +204,8 @@ export default function Index() {
         setOrderAgreed={setOrderAgreed}
         orderModelFile={orderModelFile}
         setOrderModelFile={setOrderModelFile}
+        orderPhotoFile={orderPhotoFile}
+        setOrderPhotoFile={setOrderPhotoFile}
         submitOrder={submitOrder}
       />
     </div>

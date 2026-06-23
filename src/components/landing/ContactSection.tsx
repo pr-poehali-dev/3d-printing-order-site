@@ -19,6 +19,8 @@ interface ContactSectionProps {
   setOrderAgreed: (v: boolean) => void;
   orderModelFile: File | null;
   setOrderModelFile: (v: File | null) => void;
+  orderPhotoFile: File | null;
+  setOrderPhotoFile: (v: File | null) => void;
   submitOrder: () => void;
 }
 
@@ -39,6 +41,8 @@ export default function ContactSection({
   setOrderAgreed,
   orderModelFile,
   setOrderModelFile,
+  orderPhotoFile,
+  setOrderPhotoFile,
   submitOrder,
 }: ContactSectionProps) {
   return (
@@ -128,7 +132,7 @@ export default function ContactSection({
                   </div>
                   <p className="text-white font-semibold">Заявка отправлена!</p>
                   <p className="text-muted-foreground text-sm">Мы свяжемся с вами в ближайшее время</p>
-                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); setOrderModelFile(null); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
+                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); setOrderModelFile(null); setOrderPhotoFile(null); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -186,6 +190,33 @@ export default function ContactSection({
                         accept=".stl,.obj,.step,.stp,.3mf,.ply,.gcode,.zip"
                         className="hidden"
                         onChange={e => { const f = e.target.files?.[0]; if (f) setOrderModelFile(f); }}
+                      />
+                    </label>
+                  )}
+
+                  {orderPhotoFile ? (
+                    <div className="flex items-center justify-between gap-3 bg-secondary/50 border border-blue-500/40 rounded-lg px-4 py-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Icon name="Image" size={18} className="text-blue-400 flex-shrink-0" />
+                        <span className="text-white text-sm truncate">{orderPhotoFile.name}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setOrderPhotoFile(null)}
+                        className="text-muted-foreground hover:text-red-400 transition-colors flex-shrink-0"
+                      >
+                        <Icon name="X" size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border hover:border-blue-500/50 rounded-lg px-4 py-3 cursor-pointer transition-colors text-muted-foreground hover:text-blue-400 text-sm text-center">
+                      <Icon name="Camera" size={16} />
+                      Прикрепить фото (JPG, PNG, WEBP — до 10 МБ)
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        onChange={e => { const f = e.target.files?.[0]; if (f) setOrderPhotoFile(f); }}
                       />
                     </label>
                   )}

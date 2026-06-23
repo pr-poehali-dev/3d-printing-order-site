@@ -9,6 +9,14 @@ from email.mime.multipart import MIMEMultipart
 import boto3
 
 
+def upload_to_s3(s3, file_b64, filename, content_type):
+    file_bytes = base64.b64decode(file_b64)
+    safe_name = filename.replace('/', '_').replace('\\', '_')
+    key = f"orders/{uuid.uuid4().hex}_{safe_name}"
+    s3.put_object(Bucket='files', Key=key, Body=file_bytes, ContentType=content_type)
+    return f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
+
+
 def handler(event: dict, context) -> dict:
     """Отправка заявки с сайта на почту DATAR3D@yandex.ru"""
     cors_headers = {
@@ -33,6 +41,8 @@ def handler(event: dict, context) -> dict:
     calc_total_price = body.get('calc_total_price', 0)
     model_file = body.get('model_file')
     model_filename = (body.get('model_filename') or '').strip()
+    photo_file = body.get('photo_file')
+    photo_filename = (body.get('photo_filename') or '').strip()
 
     if not name or not contact:
         return {
@@ -41,19 +51,23 @@ def handler(event: dict, context) -> dict:
             'body': json.dumps({'error': 'Укажите имя и контакт'})
         }
 
+    s3 = boto3.client(
+        's3',
+        endpoint_url='https://bucket.poehali.dev',
+        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+    )
+
     file_url = ''
     if model_file and model_filename:
-        file_bytes = base64.b64decode(model_file)
-        safe_name = model_filename.replace('/', '_').replace('\\', '_')
-        key = f"orders/{uuid.uuid4().hex}_{safe_name}"
-        s3 = boto3.client(
-            's3',
-            endpoint_url='https://bucket.poehali.dev',
-            aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-            aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
-        )
-        s3.put_object(Bucket='files', Key=key, Body=file_bytes, ContentType='application/octet-stream')
-        file_url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
+        file_url = upload_to_s3(s3, model_file, model_filename, 'application/octet-stream')
+
+    photo_url = ''
+    if photo_file and photo_filename:
+        ext = photo_filename.rsplit('.', 1)[-1].lower()
+        ct_map = {'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp', 'gif': 'image/gif'}
+        photo_ct = ct_map.get(ext, 'image/jpeg')
+        photo_url = upload_to_s3(s3, photo_file, photo_filename, photo_ct)
 
     smtp_user = os.environ['YANDEX_SMTP_USER']
     smtp_password = os.environ['YANDEX_SMTP_PASSWORD']
@@ -81,6 +95,10 @@ def handler(event: dict, context) -> dict:
     if file_url:
         file_block = f'<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">3D-модель</td><td style="padding:8px"><a href="{file_url}">{model_filename}</a></td></tr>'
 
+    photo_block = ''
+    if photo_url:
+        photo_block = f'''<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Фото</td><td style="padding:8px"><a href="{photo_url}">{photo_filename}</a><br><img src="{photo_url}" style="max-width:300px;max-height:300px;margin-top:6px;border-radius:6px" /></td></tr>'''
+
     html_body = f"""
 <h2>Новая заявка с сайта PRINT3D</h2>
 <table style="border-collapse:collapse;width:100%;max-width:500px">
@@ -89,6 +107,7 @@ def handler(event: dict, context) -> dict:
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Тип печати</td><td style="padding:8px">{print_type_label}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Описание задачи</td><td style="padding:8px">{description or 'Не указано'}</td></tr>
   {file_block}
+  {photo_block}
   {calc_block}
 </table>
 """
