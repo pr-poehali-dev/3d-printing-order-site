@@ -42,6 +42,8 @@ export default function Index() {
     });
     if (!res.ok) throw new Error("upload-url failed");
     const { upload_url, file_url } = await res.json();
+    console.log("[upload] upload_url:", upload_url);
+    console.log("[upload] file:", file.name, file.type, file.size);
 
     await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -51,10 +53,11 @@ export default function Index() {
       };
       xhr.onload = () => {
         setUploadProgress(null);
+        console.log("[upload] status:", xhr.status, xhr.responseText);
         if (xhr.status >= 200 && xhr.status < 300) resolve();
-        else reject(new Error("storage upload failed"));
+        else reject(new Error(`storage upload failed: ${xhr.status} ${xhr.responseText}`));
       };
-      xhr.onerror = () => { setUploadProgress(null); reject(new Error("network error")); };
+      xhr.onerror = () => { setUploadProgress(null); console.error("[upload] network error"); reject(new Error("network error")); };
       xhr.send(file);
     });
 
