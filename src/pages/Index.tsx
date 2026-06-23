@@ -195,6 +195,10 @@ export default function Index() {
         fileInputRef={fileInputRef}
         handleImageUpload={handleImageUpload}
         scrollTo={scrollTo}
+        onGoToOrder={() => {
+          setOrderPrintType(calcType);
+          scrollTo("contacts");
+        }}
         orderAgreed={orderAgreed}
         setOrderAgreed={setOrderAgreed}
       />

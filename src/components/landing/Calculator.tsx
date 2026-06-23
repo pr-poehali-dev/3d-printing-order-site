@@ -33,6 +33,7 @@ interface CalculatorProps {
   fileInputRef: RefObject<HTMLInputElement>;
   handleImageUpload: (file: File) => void;
   scrollTo: (id: string) => void;
+  onGoToOrder: () => void;
   orderAgreed: boolean;
   setOrderAgreed: (v: boolean) => void;
 }
@@ -59,6 +60,7 @@ export default function Calculator({
   fileInputRef,
   handleImageUpload,
   scrollTo,
+  onGoToOrder,
   orderAgreed,
   setOrderAgreed,
 }: CalculatorProps) {
@@ -274,7 +276,7 @@ export default function Calculator({
                     </span>
                   </label>
                   <button
-                    onClick={() => scrollTo("contacts")}
+                    onClick={onGoToOrder}
                     disabled={!orderAgreed}
                     className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
