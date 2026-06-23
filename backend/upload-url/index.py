@@ -18,7 +18,6 @@ def handler(event: dict, context) -> dict:
 
     body = json.loads(event.get('body') or '{}')
     filename = (body.get('filename') or '').strip()
-    content_type = (body.get('content_type') or 'application/octet-stream').strip()
 
     if not filename:
         return {
@@ -42,7 +41,6 @@ def handler(event: dict, context) -> dict:
         Params={
             'Bucket': 'files',
             'Key': key,
-            'ContentType': content_type,
         },
         ExpiresIn=3600,
     )
@@ -55,6 +53,5 @@ def handler(event: dict, context) -> dict:
         'body': json.dumps({
             'upload_url': upload_url,
             'file_url': file_url,
-            'content_type': content_type,
         })
     }

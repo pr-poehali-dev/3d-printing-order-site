@@ -38,7 +38,7 @@ export default function Index() {
     const res = await fetch(UPLOAD_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename: file.name, content_type: file.type || "application/octet-stream" }),
+      body: JSON.stringify({ filename: file.name }),
     });
     if (!res.ok) throw new Error("upload-url failed");
     const { upload_url, file_url } = await res.json();
@@ -46,7 +46,6 @@ export default function Index() {
     await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("PUT", upload_url);
-      xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
       };
