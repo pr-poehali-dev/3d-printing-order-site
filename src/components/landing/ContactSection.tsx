@@ -11,6 +11,8 @@ interface ContactSectionProps {
   setOrderPrintType: (v: string) => void;
   orderDescription: string;
   setOrderDescription: (v: string) => void;
+  orderDelivery: string;
+  setOrderDelivery: (v: string) => void;
   orderSending: boolean;
   orderSent: boolean;
   setOrderSent: (v: boolean) => void;
@@ -34,6 +36,8 @@ export default function ContactSection({
   setOrderPrintType,
   orderDescription,
   setOrderDescription,
+  orderDelivery,
+  setOrderDelivery,
   orderSending,
   orderSent,
   setOrderSent,
@@ -134,7 +138,7 @@ export default function ContactSection({
                   </div>
                   <p className="text-white font-semibold">Заявка отправлена!</p>
                   <p className="text-muted-foreground text-sm">Мы свяжемся с вами в ближайшее время</p>
-                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderAgreed(false); setOrderModelFile(null); setOrderPhotoFile(null); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
+                  <button onClick={() => { setOrderSent(false); setOrderName(""); setOrderContact(""); setOrderPrintType(""); setOrderDescription(""); setOrderDelivery(""); setOrderAgreed(false); setOrderModelFile(null); setOrderPhotoFile(null); }} className="text-blue-400 text-sm hover:underline mt-2">Отправить ещё одну</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -168,6 +172,18 @@ export default function ContactSection({
                     onChange={e => setOrderDescription(e.target.value)}
                     className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors resize-none"
                   />
+                  <select
+                    value={orderDelivery}
+                    onChange={e => setOrderDelivery(e.target.value)}
+                    className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500/60 transition-colors appearance-none"
+                  >
+                    <option value="" className="bg-card">Способ доставки</option>
+                    <option value="Самовывоз" className="bg-card">Самовывоз</option>
+                    <option value="СДЭК" className="bg-card">СДЭК</option>
+                    <option value="Яндекс Доставка" className="bg-card">Яндекс Доставка</option>
+                    <option value="Boxberry" className="bg-card">Boxberry</option>
+                    <option value="Пеший курьер Яндекс" className="bg-card">Пеший курьер Яндекс</option>
+                  </select>
 
                   {orderModelFile ? (
                     <div className="flex items-center justify-between gap-3 bg-secondary/50 border border-blue-500/40 rounded-lg px-4 py-3">

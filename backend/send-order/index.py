@@ -33,6 +33,7 @@ def handler(event: dict, context) -> dict:
     contact = body.get('contact', '').strip()
     print_type = body.get('print_type', '').strip()
     description = body.get('description', '').strip()
+    delivery = body.get('delivery', '').strip()
     calc_type = body.get('calc_type', '')
     calc_material = body.get('calc_material', '')
     calc_volume = body.get('calc_volume', 0)
@@ -105,6 +106,7 @@ def handler(event: dict, context) -> dict:
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Имя</td><td style="padding:8px">{name}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Контакт</td><td style="padding:8px">{contact}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Тип печати</td><td style="padding:8px">{print_type_label}</td></tr>
+  <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Доставка</td><td style="padding:8px">{delivery or 'Не указано'}</td></tr>
   <tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">Описание задачи</td><td style="padding:8px">{description or 'Не указано'}</td></tr>
   {file_block}
   {photo_block}

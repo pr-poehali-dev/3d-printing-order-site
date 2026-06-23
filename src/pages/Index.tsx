@@ -29,6 +29,7 @@ export default function Index() {
   const [orderSent, setOrderSent] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [orderAgreed, setOrderAgreed] = useState(false);
+  const [orderDelivery, setOrderDelivery] = useState("");
   const [orderModelFile, setOrderModelFile] = useState<File | null>(null);
   const [orderPhotoFile, setOrderPhotoFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -130,6 +131,7 @@ export default function Index() {
           contact: orderContact,
           print_type: orderPrintType,
           description: orderDescription,
+          delivery: orderDelivery,
           model_file: modelFile,
           model_filename: modelFilename,
           photo_file: photoFile,
@@ -199,6 +201,8 @@ export default function Index() {
         setOrderPrintType={setOrderPrintType}
         orderDescription={orderDescription}
         setOrderDescription={setOrderDescription}
+        orderDelivery={orderDelivery}
+        setOrderDelivery={setOrderDelivery}
         orderSending={orderSending}
         orderSent={orderSent}
         setOrderSent={setOrderSent}
