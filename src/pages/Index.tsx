@@ -45,9 +45,10 @@ export default function Index() {
   const selectedMaterial = materials.find(m => m.id === calcMaterial) || materials[0];
   const vol = parseFloat(volume) || 0;
   const qty = parseInt(quantity) || 1;
+  const MIN_ORDER = 2000;
   const basePrice = vol * selectedMaterial.pricePerCm3;
-  const totalPrice = basePrice * qty;
-  const pricePerPiece = basePrice;
+  const totalPrice = Math.max(basePrice * qty, vol > 0 ? MIN_ORDER : 0);
+  const pricePerPiece = qty > 0 ? totalPrice / qty : basePrice;
 
   const handleImageUpload = async (file: File) => {
     setImageResult(null);
@@ -177,6 +178,7 @@ export default function Index() {
         qty={qty}
         pricePerPiece={pricePerPiece}
         totalPrice={totalPrice}
+        isMinOrder={vol > 0 && basePrice * qty < MIN_ORDER}
         imageAnalyzing={imageAnalyzing}
         imageResult={imageResult}
         previewUrl={previewUrl}

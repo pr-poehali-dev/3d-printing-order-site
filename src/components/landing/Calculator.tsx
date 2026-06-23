@@ -26,6 +26,7 @@ interface CalculatorProps {
   qty: number;
   pricePerPiece: number;
   totalPrice: number;
+  isMinOrder: boolean;
   imageAnalyzing: boolean;
   imageResult: ImageResult;
   previewUrl: string | null;
@@ -51,6 +52,7 @@ export default function Calculator({
   qty,
   pricePerPiece,
   totalPrice,
+  isMinOrder,
   imageAnalyzing,
   imageResult,
   previewUrl,
@@ -249,6 +251,7 @@ export default function Calculator({
                           {vol > 0 ? totalPrice.toFixed(0) : "—"} <span className="text-xl sm:text-2xl">₽</span>
                         </div>
                         {vol <= 0 && <div className="text-xs text-muted-foreground">введите объём модели</div>}
+                        {isMinOrder && <div className="text-xs text-blue-400 mt-1">минимальный заказ 2 000 ₽</div>}
                       </div>
                     </div>
 
