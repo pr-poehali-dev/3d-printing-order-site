@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Missing filename",
+      "method": "POST",
+      "path": "/",
+      "body": {"filename": ""},
+      "expectedStatus": 400
+    },
+    {
+      "name": "Get presigned url",
+      "method": "POST",
+      "path": "/",
+      "body": {"filename": "model.stl", "content_type": "application/octet-stream"},
+      "expectedStatus": 200
+    }
+  ]
+}

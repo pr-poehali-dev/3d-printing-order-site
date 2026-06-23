@@ -1,5 +1,6 @@
 export const ANALYZE_IMAGE_URL = "https://functions.poehali.dev/82aa100b-18c1-4a0f-959d-7e36027ecf84";
 export const SEND_ORDER_URL = "https://functions.poehali.dev/3d462ff9-cdff-4155-bb2d-15fdee341c9e";
+export const UPLOAD_URL = "https://functions.poehali.dev/db1062dc-e62e-4ff1-adf3-e68e0e0e2495";
 
 export const PHOTO_MATERIALS = [
   { id: "standard", name: "Стандартная смола", pricePerCm3: 35, color: "#60a5fa", desc: "Общие модели, прототипы, детали" },

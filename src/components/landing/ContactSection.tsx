@@ -19,6 +19,7 @@ interface ContactSectionProps {
   setOrderAgreed: (v: boolean) => void;
   orderModelFile: File | null;
   setOrderModelFile: (v: File | null) => void;
+  uploadProgress: number | null;
   submitOrder: () => void;
 }
 
@@ -39,6 +40,7 @@ export default function ContactSection({
   setOrderAgreed,
   orderModelFile,
   setOrderModelFile,
+  uploadProgress,
   submitOrder,
 }: ContactSectionProps) {
   return (
@@ -164,23 +166,35 @@ export default function ContactSection({
                   />
 
                   {orderModelFile ? (
-                    <div className="flex items-center justify-between gap-3 bg-secondary/50 border border-blue-500/40 rounded-lg px-4 py-3">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <Icon name="FileBox" size={18} className="text-blue-400 flex-shrink-0" />
-                        <span className="text-white text-sm truncate">{orderModelFile.name}</span>
+                    <div className="bg-secondary/50 border border-blue-500/40 rounded-lg px-4 py-3 space-y-2">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Icon name="FileBox" size={18} className="text-blue-400 flex-shrink-0" />
+                          <span className="text-white text-sm truncate">{orderModelFile.name}</span>
+                        </div>
+                        {uploadProgress === null && (
+                          <button
+                            type="button"
+                            onClick={() => setOrderModelFile(null)}
+                            className="text-muted-foreground hover:text-red-400 transition-colors flex-shrink-0"
+                          >
+                            <Icon name="X" size={16} />
+                          </button>
+                        )}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setOrderModelFile(null)}
-                        className="text-muted-foreground hover:text-red-400 transition-colors flex-shrink-0"
-                      >
-                        <Icon name="X" size={16} />
-                      </button>
+                      {uploadProgress !== null && (
+                        <div>
+                          <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                            <div className="h-full bg-blue-500 transition-all" style={{ width: `${uploadProgress}%` }} />
+                          </div>
+                          <span className="text-xs text-blue-400 mt-1 block">Загрузка модели: {uploadProgress}%</span>
+                        </div>
+                      )}
                     </div>
                   ) : (
-                    <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border hover:border-blue-500/50 rounded-lg px-4 py-3 cursor-pointer transition-colors text-muted-foreground hover:text-blue-400 text-sm">
+                    <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border hover:border-blue-500/50 rounded-lg px-4 py-3 cursor-pointer transition-colors text-muted-foreground hover:text-blue-400 text-sm text-center">
                       <Icon name="Upload" size={16} />
-                      Прикрепить 3D-модель (STL, OBJ, STEP, 3MF)
+                      Прикрепить 3D-модель (STL, OBJ, STEP, 3MF — до 500 МБ)
                       <input
                         type="file"
                         accept=".stl,.obj,.step,.stp,.3mf,.ply,.gcode,.zip"
@@ -212,7 +226,7 @@ export default function ContactSection({
                     className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-100"
                   >
                     {orderSending && <Icon name="Loader" size={16} className="animate-spin" />}
-                    {orderSending ? "Отправляем..." : "Отправить заявку"}
+                    {orderSending ? (uploadProgress !== null ? `Загрузка модели ${uploadProgress}%` : "Отправляем...") : "Отправить заявку"}
                   </button>
                 </div>
               )}

@@ -5,6 +5,7 @@ import ContactSection from "@/components/landing/ContactSection";
 import {
   ANALYZE_IMAGE_URL,
   SEND_ORDER_URL,
+  UPLOAD_URL,
   PHOTO_MATERIALS,
   EXTRUSION_MATERIALS,
   PrintType,
@@ -30,15 +31,36 @@ export default function Index() {
   const [orderError, setOrderError] = useState("");
   const [orderAgreed, setOrderAgreed] = useState(false);
   const [orderModelFile, setOrderModelFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const fileToBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve((reader.result as string).split(",")[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+  const uploadFileDirect = async (file: File): Promise<string> => {
+    const res = await fetch(UPLOAD_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ filename: file.name, content_type: file.type || "application/octet-stream" }),
     });
+    if (!res.ok) throw new Error("upload-url failed");
+    const { upload_url, file_url } = await res.json();
+
+    await new Promise<void>((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("PUT", upload_url);
+      xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      };
+      xhr.onload = () => {
+        setUploadProgress(null);
+        if (xhr.status >= 200 && xhr.status < 300) resolve();
+        else reject(new Error("storage upload failed"));
+      };
+      xhr.onerror = () => { setUploadProgress(null); reject(new Error("network error")); };
+      xhr.send(file);
+    });
+
+    return file_url;
+  };
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
   const selectedMaterial = materials.find(m => m.id === calcMaterial) || materials[0];
@@ -103,10 +125,10 @@ export default function Index() {
     }
     setOrderSending(true);
     try {
-      let modelFile: string | undefined;
+      let modelUrl: string | undefined;
       let modelFilename: string | undefined;
       if (orderModelFile) {
-        modelFile = await fileToBase64(orderModelFile);
+        modelUrl = await uploadFileDirect(orderModelFile);
         modelFilename = orderModelFile.name;
       }
       const res = await fetch(SEND_ORDER_URL, {
@@ -117,7 +139,7 @@ export default function Index() {
           contact: orderContact,
           print_type: orderPrintType,
           description: orderDescription,
-          model_file: modelFile,
+          model_url: modelUrl,
           model_filename: modelFilename,
           calc_type: calcType,
           calc_material: selectedMaterial.name,
@@ -133,9 +155,10 @@ export default function Index() {
         setOrderError("Ошибка отправки. Попробуйте позже.");
       }
     } catch {
-      setOrderError("Ошибка сети. Попробуйте позже.");
+      setOrderError("Ошибка при загрузке файла или отправке. Попробуйте позже.");
     } finally {
       setOrderSending(false);
+      setUploadProgress(null);
     }
   };
 
@@ -191,6 +214,7 @@ export default function Index() {
         setOrderAgreed={setOrderAgreed}
         orderModelFile={orderModelFile}
         setOrderModelFile={setOrderModelFile}
+        uploadProgress={uploadProgress}
         submitOrder={submitOrder}
       />
     </div>
