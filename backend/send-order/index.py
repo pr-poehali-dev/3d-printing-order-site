@@ -1,8 +1,12 @@
 import json
 import os
+import base64
+import uuid
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+import boto3
 
 
 def handler(event: dict, context) -> dict:
@@ -27,7 +31,7 @@ def handler(event: dict, context) -> dict:
     calc_quantity = body.get('calc_quantity', 1)
     calc_price_per_piece = body.get('calc_price_per_piece', 0)
     calc_total_price = body.get('calc_total_price', 0)
-    model_url = (body.get('model_url') or '').strip()
+    model_file = body.get('model_file')
     model_filename = (body.get('model_filename') or '').strip()
 
     if not name or not contact:
@@ -36,6 +40,20 @@ def handler(event: dict, context) -> dict:
             'headers': cors_headers,
             'body': json.dumps({'error': 'Укажите имя и контакт'})
         }
+
+    file_url = ''
+    if model_file and model_filename:
+        file_bytes = base64.b64decode(model_file)
+        safe_name = model_filename.replace('/', '_').replace('\\', '_')
+        key = f"orders/{uuid.uuid4().hex}_{safe_name}"
+        s3 = boto3.client(
+            's3',
+            endpoint_url='https://bucket.poehali.dev',
+            aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+        )
+        s3.put_object(Bucket='files', Key=key, Body=file_bytes, ContentType='application/octet-stream')
+        file_url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
 
     smtp_user = os.environ['YANDEX_SMTP_USER']
     smtp_password = os.environ['YANDEX_SMTP_PASSWORD']
@@ -60,9 +78,8 @@ def handler(event: dict, context) -> dict:
 """
 
     file_block = ''
-    if model_url:
-        label = model_filename or 'Скачать модель'
-        file_block = f'<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">3D-модель</td><td style="padding:8px"><a href="{model_url}">{label}</a></td></tr>'
+    if file_url:
+        file_block = f'<tr><td style="padding:8px;font-weight:bold;background:#f5f5f5">3D-модель</td><td style="padding:8px"><a href="{file_url}">{model_filename}</a></td></tr>'
 
     html_body = f"""
 <h2>Новая заявка с сайта PRINT3D</h2>

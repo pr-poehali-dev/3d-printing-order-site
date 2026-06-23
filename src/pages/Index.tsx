@@ -5,7 +5,6 @@ import ContactSection from "@/components/landing/ContactSection";
 import {
   ANALYZE_IMAGE_URL,
   SEND_ORDER_URL,
-  UPLOAD_URL,
   PHOTO_MATERIALS,
   EXTRUSION_MATERIALS,
   PrintType,
@@ -31,38 +30,15 @@ export default function Index() {
   const [orderError, setOrderError] = useState("");
   const [orderAgreed, setOrderAgreed] = useState(false);
   const [orderModelFile, setOrderModelFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const uploadFileDirect = async (file: File): Promise<string> => {
-    const res = await fetch(UPLOAD_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename: file.name }),
+  const fileToBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve((reader.result as string).split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
     });
-    if (!res.ok) throw new Error("upload-url failed");
-    const { upload_url, file_url } = await res.json();
-    console.log("[upload] upload_url:", upload_url);
-    console.log("[upload] file:", file.name, file.type, file.size);
-
-    await new Promise<void>((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("PUT", upload_url);
-      xhr.upload.onprogress = (e) => {
-        if (e.lengthComputable) setUploadProgress(Math.round((e.loaded / e.total) * 100));
-      };
-      xhr.onload = () => {
-        setUploadProgress(null);
-        console.log("[upload] status:", xhr.status, xhr.responseText);
-        if (xhr.status >= 200 && xhr.status < 300) resolve();
-        else reject(new Error(`storage upload failed: ${xhr.status} ${xhr.responseText}`));
-      };
-      xhr.onerror = () => { setUploadProgress(null); console.error("[upload] network error"); reject(new Error("network error")); };
-      xhr.send(file);
-    });
-
-    return file_url;
-  };
 
   const materials = calcType === "photo" ? PHOTO_MATERIALS : EXTRUSION_MATERIALS;
   const selectedMaterial = materials.find(m => m.id === calcMaterial) || materials[0];
@@ -121,16 +97,16 @@ export default function Index() {
       setOrderError("Необходимо принять условия договора оферты");
       return;
     }
-    if (orderModelFile && orderModelFile.size > 500 * 1024 * 1024) {
-      setOrderError("Файл слишком большой. Максимум 500 МБ.");
+    if (orderModelFile && orderModelFile.size > 50 * 1024 * 1024) {
+      setOrderError("Файл слишком большой. Максимум 50 МБ.");
       return;
     }
     setOrderSending(true);
     try {
-      let modelUrl: string | undefined;
+      let modelFile: string | undefined;
       let modelFilename: string | undefined;
       if (orderModelFile) {
-        modelUrl = await uploadFileDirect(orderModelFile);
+        modelFile = await fileToBase64(orderModelFile);
         modelFilename = orderModelFile.name;
       }
       const res = await fetch(SEND_ORDER_URL, {
@@ -141,7 +117,7 @@ export default function Index() {
           contact: orderContact,
           print_type: orderPrintType,
           description: orderDescription,
-          model_url: modelUrl,
+          model_file: modelFile,
           model_filename: modelFilename,
           calc_type: calcType,
           calc_material: selectedMaterial.name,
@@ -157,10 +133,9 @@ export default function Index() {
         setOrderError("Ошибка отправки. Попробуйте позже.");
       }
     } catch {
-      setOrderError("Ошибка при загрузке файла или отправке. Попробуйте позже.");
+      setOrderError("Ошибка при отправке. Попробуйте позже.");
     } finally {
       setOrderSending(false);
-      setUploadProgress(null);
     }
   };
 
@@ -216,7 +191,6 @@ export default function Index() {
         setOrderAgreed={setOrderAgreed}
         orderModelFile={orderModelFile}
         setOrderModelFile={setOrderModelFile}
-        uploadProgress={uploadProgress}
         submitOrder={submitOrder}
       />
     </div>
