@@ -1,12 +1,16 @@
 import json
 import os
+import re
 import base64
 import uuid
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.utils import formataddr
 
 import boto3
+
+EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
 
 def handler(event: dict, context) -> dict:
@@ -112,6 +116,8 @@ def handler(event: dict, context) -> dict:
     msg['Subject'] = f'Новая заявка от {name}'
     msg['From'] = smtp_user
     msg['To'] = recipient
+    if EMAIL_RE.match(contact):
+        msg['Reply-To'] = formataddr((name, contact))
     msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
     with smtplib.SMTP_SSL('smtp.yandex.ru', 465) as server:
