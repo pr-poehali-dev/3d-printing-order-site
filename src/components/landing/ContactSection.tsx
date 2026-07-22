@@ -57,7 +57,7 @@ export default function ContactSection({
       <section id="about" className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
-            <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">03 / О нас</span>
+            <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">04 / О нас</span>
             <h2 className="text-3xl md:text-4xl font-black text-white mt-3">О компании</h2>
           </div>
 
@@ -97,7 +97,7 @@ export default function ContactSection({
       <section id="contacts" className="py-16 md:py-24 bg-secondary/20 bg-grid">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10 md:mb-16">
-            <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">04 / Контакты</span>
+            <span className="text-xs font-mono-code text-blue-400 tracking-widest uppercase">05 / Контакты</span>
             <h2 className="text-3xl md:text-4xl font-black text-white mt-3">Свяжитесь с нами</h2>
             <p className="text-muted-foreground mt-3 text-sm md:text-base">Отправьте файл модели и получите точный расчёт в течение часа</p>
           </div>

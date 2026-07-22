@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import Header from "@/components/landing/Header";
 import Calculator from "@/components/landing/Calculator";
+import SeoSection from "@/components/landing/SeoSection";
 import ContactSection from "@/components/landing/ContactSection";
 import {
   ANALYZE_IMAGE_URL,
@@ -202,6 +203,8 @@ export default function Index() {
         orderAgreed={orderAgreed}
         setOrderAgreed={setOrderAgreed}
       />
+
+      <SeoSection />
 
       <ContactSection
         orderName={orderName}
