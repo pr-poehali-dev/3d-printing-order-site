@@ -151,7 +151,7 @@ export default function ContactSection({
                   />
                   <input
                     type="text"
-                    placeholder="Телефон или email"
+                    placeholder="Email"
                     value={orderContact}
                     onChange={e => setOrderContact(e.target.value)}
                     className="w-full bg-secondary/50 border border-border rounded-lg px-4 py-3 text-white placeholder-muted-foreground text-sm focus:outline-none focus:border-blue-500/60 transition-colors"
